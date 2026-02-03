@@ -33,12 +33,12 @@ export const createPaste = async (req, res) => {
         .json({ error: "max_views must be an integer >= 1" });
     }
 
-    const now = getNow();
-
-    // const expiresAt = ttl_seconds !== undefined ? new Date(now.getTime() + ttl_seconds * 1000) : null;
+    const now = getNow(req);
 
     const expiresAt =
-      ttl_seconds !== undefined ? now + ttl_seconds * 1000 : null;
+      ttl_seconds !== undefined
+        ? new Date(now.getTime() + ttl_seconds * 1000)
+        : null;
 
     // Ensure maxViews and remainingViews are null if not provided
     const maxViewsValue = max_views !== undefined ? max_views : null;
@@ -64,7 +64,7 @@ export const createPaste = async (req, res) => {
 export const getPaste = async (req, res) => {
   try {
     const { id } = req.params;
-    const now = getNow();
+    const now = getNow(req);
 
     // Step 1: fetch paste
     const paste = await Paste.findById(id);
@@ -74,9 +74,9 @@ export const getPaste = async (req, res) => {
     }
 
     // Step 2: TTL check
-    if (paste.expiresAt !== null && now > paste.expiresAt) {
-  return res.status(404).json({ error: "Paste not found" });
-}
+    if (paste.expiresAt && now > paste.expiresAt) {
+      return res.status(404).json({ error: "Paste not found" });
+    }
 
     // Step 3: max views check
     if (paste.remainingViews !== null && paste.remainingViews <= 0) {

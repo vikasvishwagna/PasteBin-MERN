@@ -1,12 +1,12 @@
-let fakeNow = Date.now();
-
-export default function getNow() {
+export default function getNow(req) {
+  // Deterministic time 
   if (process.env.TEST_MODE === "1") {
-    return fakeNow; 
+    const headerTime = req?.headers["x-test-now-ms"];
+    if (headerTime) {
+      return new Date(Number(headerTime));
+    }
   }
-  return Date.now(); 
-}
 
-export function advanceTime(seconds) {
-  fakeNow += seconds * 1000;
+  // Real system time
+  return new Date();
 }
