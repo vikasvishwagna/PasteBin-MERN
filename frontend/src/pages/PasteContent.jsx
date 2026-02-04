@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 
+
 function PasteContent() {
   const [content, setContent] = useState("");
   const [ttl, setTtl] = useState("");
@@ -8,7 +9,7 @@ function PasteContent() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  const BACKEND_BASE_URL = "http://localhost:5000";
+  const BACKEND_BASE_URL = import.meta.env.VITE_BACKEND_BASE_URL;
 
   const createPaste = async () => {
     setError(null);
