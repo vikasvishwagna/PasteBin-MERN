@@ -23,13 +23,11 @@ export const viewPasteHTML = async (req, res) => {
       return res.status(404).send("Paste unavailable");
     }
 
-    // Decrement remainingViews only if not unlimited
     if (paste.remainingViews !== null) {
       paste.remainingViews -= 1;
       await paste.save();
     }
 
-    // Render HTML safely
     res.status(200).send(`
       <!DOCTYPE html>
       <html>

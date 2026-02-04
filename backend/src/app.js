@@ -17,7 +17,6 @@ app.use("/api", healthRoutes);
 app.use("/api", pasteRoutes);
 app.use("/",pasteRoutes)
 
-// Root sanity check (optional, not graded)
 app.get("/", (req, res) => {
   res.json({ message: "Pastebin-Lite backend running" });
 });
